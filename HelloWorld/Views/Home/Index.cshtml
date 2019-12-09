@@ -1,0 +1,71 @@
+﻿@model HomePageViewModel
+@{ 
+    ViewBag.Title = "职工列表";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    body {margin:10px auto; text-align:center}
+    table {
+        margin: 0 auto;
+        width:90%
+    }
+    table, th, td {
+        border: 1px, solid, #eee;
+        border-collapse:collapse;
+        border-spacing: 0;
+        padding:5px;
+        text-align:center
+    }
+    .txt-left {
+        text-align:left;
+    }
+</style>
+@*<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Home 控制器下的 Index 方法</title>
+</head>
+<body>
+    <h1>欢迎!</h1>
+    <div>这个消息来自 Home 控制器下的 Index 的视图文件 index.cshtml </div>
+    <div>@Model.Name</div>
+    <table>
+        @foreach (var employee in Model.Employees)
+        {
+            <tr>
+                <td><a href="/Home/Detail/@employee.ID">@employee.ID</a></td>
+                <td>@employee.Name</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>*@
+
+<h1>职工列表</h1>
+@*<div>这个消息来自 Home 控制器下的 Index 的视图文件 index.cshtml </div>*@
+@*<div>@Model.Name</div>*@
+<table>
+    <tr>
+        <td>ID</td>
+        <td>姓名</td>
+        <td class="txt-left">操作</td>
+    </tr>
+    @foreach (var employee in Model.Employees)
+    {
+    <tr>
+        @*<td><a href="/Home/Detail/@employee.ID">@employee.ID</a></td>*@
+        @*<td>@Html.ActionLink(employee.ID.ToString(), "Detail", new { id = employee.ID })</td>*@
+
+        <td>@employee.ID</td>
+        <td>@employee.Name</td>
+        <td class="txt-left"><a asp-action="Detail" asp-route-Id="@employee.ID">详情</a>&nbsp;
+        <a asp-controller="Home" asp-action="Edit" asp-route-id="@employee.ID">编辑</a>
+        </td>
+    </tr>
+    }
+</table>
+<br />
+<p>
+    <a asp-action="Create">新增员工</a>
+</p>
