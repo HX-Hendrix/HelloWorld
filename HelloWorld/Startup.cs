@@ -7,6 +7,7 @@ using HelloWorld.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,9 +29,13 @@ namespace HelloWorld
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddEntityFrameworkSqlite()
-        .AddDbContext<HelloWorldDBContext>
-            (options => options.UseSqlite(Configuration["database:connection"]));
+            //    services.AddEntityFrameworkSqlite()
+            //.AddDbContext<HelloWorldDBContext>
+            //    (options => options.UseSqlite(Configuration["database:connection"]));
+            // 使用第二种方式 操作数据
+            services.AddEntityFrameworkSqlite().AddDbContext<HelloWorldDBContext>();
+            // 添加Identigy服务
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<HelloWorldDBContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,19 +56,21 @@ namespace HelloWorld
             //app.UseStaticFiles();
 
             //可以替换上述中间件
-            //app.UseFileServer();
+            app.UseFileServer();
+
+            app.UseAuthentication();
             //app.UseMvcWithDefaultRoute();
             app.UseMvc(ConfigureRoute);
 
             // 中间件是一种装配到应用程序管道以处理请求和响应的组件
 
             // 注册中间件的 终端，在它之后，永远不会调用下一个中间件
-            app.Run(async (context) =>
-            {
-                //throw new Exception("Throw Exception");
-                var msg = Configuration["message"];
-                await context.Response.WriteAsync(msg);
-            });
+            //app.Run(async (context) =>
+            //{
+            //    //throw new Exception("Throw Exception");
+            //    var msg = Configuration["message"];
+            //    await context.Response.WriteAsync(msg);
+            //});
         }
 
         private void ConfigureRoute(IRouteBuilder routeBuilder)
